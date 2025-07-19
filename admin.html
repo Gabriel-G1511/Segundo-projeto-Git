@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo - Sabor da Casa</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    #painel { display: none; }
+    textarea { width: 100%; height: 60px; }
+  </style>
+</head>
+<body>
+  <h1>Admin - Sabor da Casa</h1>
+
+  <div id="login">
+    <input type="password" id="senha" placeholder="Digite a senha">
+    <button onclick="verificarSenha()">Entrar</button>
+  </div>
+
+  <div id="painel">
+    <h2>Prato do Dia</h2>
+    <textarea id="ingredientesInput" placeholder="Ex: Arroz, Feijão, Carne..."></textarea>
+
+    <h2>Bebidas</h2>
+    <textarea id="bebidasInput" placeholder="Ex: Coca 2L, Guaraná 600..."></textarea>
+
+    <button onclick="salvarCardapio()">Salvar Cardápio</button>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    function verificarSenha() {
+      const senha = document.getElementById("senha").value;
+      if (senha === "22155122") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("painel").style.display = "block";
+      } else {
+        alert("Senha incorreta");
+      }
+    }
+
+    function salvarCardapio() {
+      const ingredientes = document.getElementById("ingredientesInput").value.split(",").map(i => i.trim());
+      const bebidas = document.getElementById("bebidasInput").value.split(",").map(i => i.trim());
+      localStorage.setItem("pratoDoDia", JSON.stringify(ingredientes));
+      localStorage.setItem("bebidas", JSON.stringify(bebidas));
+      document.getElementById("status").innerText = "Cardápio salvo com sucesso!";
+    }
+  </script>
+</body>
+</html>
