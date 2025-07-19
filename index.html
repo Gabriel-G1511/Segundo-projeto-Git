@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sabor da Casa - Pedido</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Sabor da Casa</h1>
+
+  <section id="prato">
+    <h2>Prato do Dia</h2>
+    <form id="pedidoForm">
+      <div id="ingredientes"></div>
+
+      <h3>Bebidas</h3>
+      <div id="bebidas"></div>
+
+      <h3>Seus dados</h3>
+      <input type="text" placeholder="Nome" id="nome" required><br>
+      <input type="text" placeholder="Telefone" id="telefone" required><br>
+      <input type="text" placeholder="Endereço" id="endereco" required><br>
+      <textarea placeholder="Observações" id="obs"></textarea><br>
+
+      <button type="submit">Enviar Pedido via WhatsApp</button>
+    </form>
+  </section>
+
+  <script>
+    const ingredientes = JSON.parse(localStorage.getItem("pratoDoDia")) || [];
+    const bebidas = JSON.parse(localStorage.getItem("bebidas")) || [];
+
+    const divIngredientes = document.getElementById("ingredientes");
+    const divBebidas = document.getElementById("bebidas");
+
+    ingredientes.forEach(item => {
+      divIngredientes.innerHTML += `<label><input type='checkbox' checked name='ingredientes' value='${item}'> ${item}</label><br>`;
+    });
+
+    bebidas.forEach(b => {
+      divBebidas.innerHTML += `<label><input type='checkbox' name='bebidas' value='${b}'> ${b}</label><br>`;
+    });
+
+    document.getElementById("pedidoForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const nome = document.getElementById("nome").value;
+      const telefone = document.getElementById("telefone").value;
+      const endereco = document.getElementById("endereco").value;
+      const obs = document.getElementById("obs").value;
+
+      const ingSelecionados = [...document.querySelectorAll("input[name='ingredientes']:checked")].map(i => i.value);
+      const bebidasSelecionadas = [...document.querySelectorAll("input[name='bebidas']:checked")].map(i => i.value);
+
+      const mensagem = `*Pedido - Sabor da Casa*%0A
+Nome: ${nome}%0ATelefone: ${telefone}%0AEndereço: ${endereco}%0A%0A*Prato do Dia:* ${ingSelecionados.join(", ")}%0A*Bebidas:* ${bebidasSelecionadas.join(", ")}%0A*Obs:* ${obs}`;
+
+      window.open(`https://wa.me/55SEUNUMERO?text=${mensagem}`, "_blank");
+    });
+  </script>
+</body>
+</html>
